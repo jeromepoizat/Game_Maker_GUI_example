@@ -34,9 +34,15 @@
     "IDEVersion": "2023.11.1.129",
   },
   "resources": [
+    {"id":{"name":"scr_textbox_surface_end","path":"scripts/scr_textbox_surface_end/scr_textbox_surface_end.yy",},},
+    {"id":{"name":"scr_textbox_surface_start","path":"scripts/scr_textbox_surface_start/scr_textbox_surface_start.yy",},},
+    {"id":{"name":"scr_is_char_letter","path":"scripts/scr_is_char_letter/scr_is_char_letter.yy",},},
     {"id":{"name":"obj_GUIbox","path":"objects/obj_GUIbox/obj_GUIbox.yy",},},
     {"id":{"name":"spr_sprite1","path":"sprites/spr_sprite1/spr_sprite1.yy",},},
     {"id":{"name":"obj_controller","path":"objects/obj_controller/obj_controller.yy",},},
+    {"id":{"name":"fnt_default","path":"fonts/fnt_default/fnt_default.yy",},},
+    {"id":{"name":"scr_textbox_step","path":"scripts/scr_textbox_step/scr_textbox_step.yy",},},
+    {"id":{"name":"scr_textbox_draw","path":"scripts/scr_textbox_draw/scr_textbox_draw.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "RoomOrderNodes": [

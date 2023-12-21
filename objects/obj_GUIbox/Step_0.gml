@@ -8,6 +8,10 @@ var _owner_size_y = global.gui_y;
 
 box_fit_txt()
 
+if writable {
+	scr_textbox_step();	
+}
+
 //check if mouse is hoovering
 if _mouse_gui_x > x - hoover_err
 && _mouse_gui_x < x + real_size_x + hoover_err
@@ -62,7 +66,11 @@ if _mouse_gui_x > x - hoover_err
 			click_x = _mouse_gui_x;
 			click_y = _mouse_gui_y;
 			
-			if resizable == true {
+			if selectable {
+				selected = true;	
+			}
+			
+			if resizable {
 				resizing_left = hoover_resizing_left;	
 				resizing_right = hoover_resizing_right;
 				resizing_top = hoover_resizing_top;
@@ -113,6 +121,10 @@ if mouse_check_button_released(mb_left){
 	resizing_right = false;
 	resizing_top = false;
 	resizing_bottom = false;
+	
+	if !hoovered {
+		selected = false;
+	}
 }
 
 if moving {
@@ -260,7 +272,7 @@ if resizing_left || resizing_right || resizing_top || resizing_bottom  {
  draw_sub = sub_hoover_selected;		
 }
 
-if (writable && hoovered){
+if (writable && (hoovered || clicked)){
 	window_set_cursor(cr_beam);
 }
 else
