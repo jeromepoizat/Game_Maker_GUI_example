@@ -10,6 +10,7 @@ draw_sprite_ext(sprite_box, draw_sub,
 if txt != "" {
 	draw_set_halign(fa_center);
 	draw_set_valign(fa_middle);
+	draw_set_font(txt_font);
 	if writable == false {
 		if fit_txt_width {
 			draw_text_transformed_color(
@@ -29,7 +30,7 @@ if txt != "" {
 				y + real_size_y/2,
 				txt,
 				-1,
-				real_size_x - txt_border_x_len*2,
+				size_x - txt_border_x_len*2,
 				global.gui_scale,
 				global.gui_scale,
 				0,

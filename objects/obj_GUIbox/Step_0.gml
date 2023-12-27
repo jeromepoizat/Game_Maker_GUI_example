@@ -1,10 +1,26 @@
 var _mouse_gui_x = device_mouse_x_to_gui(0);
 var _mouse_gui_y = device_mouse_y_to_gui(0);
 
-var _owner_x = 0;
-var _owner_y = 0;
-var _owner_size_x = global.gui_x;
-var _owner_size_y = global.gui_y;
+
+var _owner_x;
+var _owner_y;
+var _owner_size_x;
+var _owner_size_y
+
+if owner == noone {
+	//window
+	_owner_x = 0;
+	_owner_y = 0;
+	_owner_size_x = global.gui_x;
+	_owner_size_y = global.gui_y;
+}
+else
+{
+	_owner_x = owner.x;
+	_owner_y = owner.y;
+	_owner_size_x = owner.real_size_x;
+	_owner_size_y = owner.real_size_y;	
+}
 
 box_fit_txt()
 
@@ -133,24 +149,15 @@ if moving {
 	y = y + (_mouse_gui_y - click_y);
 	click_x = _mouse_gui_x;
 	click_y = _mouse_gui_y;
-	
-	//keep object in ui borders
-	if x < _owner_x {
-		x = _owner_x;
-	}
-	if x + real_size_x > _owner_size_x {
-		x = _owner_size_x - real_size_x;
-	}
-	if y < _owner_y {
-		y = _owner_y;
-	}
-	if y + real_size_y > _owner_size_y {
-		y = _owner_size_y - real_size_y;
-	}
 }
 else
 if resizable {
-	if ( resizing_left || resizing_right || resizing_top || resizing_bottom ){
+	if ( resizing_left || resizing_right || resizing_top || resizing_bottom )
+	/*
+	&& (_mouse_gui_x >= _owner_x && _mouse_gui_x <= _owner_x + _owner_size_x && 
+		_mouse_gui_y >= _owner_y && _mouse_gui_y <= _owner_y + _owner_size_y)
+	*/
+	{
 
 		var _old_size_x = size_x;
 		var _old_size_y = size_y;
@@ -170,10 +177,10 @@ if resizable {
 				
 				box_fit_txt();
 
-				x = x - (size_x - _old_size_x);
+				x = x - (size_x - _old_size_x)*global.gui_scale;
 				
 				if x < _owner_x { 
-					size_x = size_x + x;
+					size_x = size_x + x/global.gui_scale;
 					x = _owner_x;
 				}
 			}
@@ -194,8 +201,8 @@ if resizable {
 				
 				box_fit_txt();
 				
-				if x + size_x > _owner_size_x {
-					size_x = _owner_size_x - x;
+				if x + size_x*global.gui_scale > _owner_size_x {
+					size_x = (_owner_size_x - x)/global.gui_scale;
 				}
 			}
 		}
@@ -215,10 +222,10 @@ if resizable {
 				
 				box_fit_txt();
 
-				y = y - (size_y - _old_size_y);
+				y = y - (size_y - _old_size_y)*global.gui_scale;
 				
 				if y < _owner_x { 
-					size_y = size_y + y;
+					size_y = size_y + y/global.gui_scale;
 					y = _owner_x;
 				}
 			}	
@@ -239,8 +246,8 @@ if resizable {
 				
 				box_fit_txt();
 				
-				if y + size_y > _owner_size_y {
-					size_y = _owner_size_y - y;
+				if y + size_y*global.gui_scale > _owner_size_y {
+					size_y = (_owner_size_y - y)/global.gui_scale;
 				}
 			}			
 		}
@@ -307,6 +314,20 @@ else
 }
 
 
+//keep object in ui borders
+if x < _owner_x {
+	x = _owner_x;
+}
+if x + real_size_x > _owner_size_x {
+	x = _owner_size_x - real_size_x;
+}
+if y < _owner_y {
+	y = _owner_y;
+}
+if y + real_size_y > _owner_size_y {
+	y = _owner_size_y - real_size_y;
+}
+	
 //refresh variables
 
 draw_x = x;

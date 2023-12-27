@@ -1,13 +1,9 @@
-//TODO: move this
-global.gui_x = window_get_width();
-global.gui_y = window_get_height();
-global.gui_scale = 1.5;
-
-//TODO: option for digits only + 3 digit seperator
+//TODO: txt option for digits only + 3 digit seperator
 
 visible = false;
 alarm[0]=1;
 
+owner = noone;
 sprite_box =  spr_sprite1;
 size_x = 300;
 size_y = 60;
@@ -19,16 +15,17 @@ txt = "SOMETHING to write here or something to not Write here, up to you to deci
 border_x_len = 10;
 border_y_len = 6;
 hoover_err = 5; // amount of error in pixel accepted for hoover state
-fit_txt_height = false;
-fit_txt_width = false;
+fit_txt_height = true; //will strecth size_y to fit text
+fit_txt_width = false; //will strecth size_x to fit text
+fitdown_txt_height = false; //will fit window height to minimum size_y
 
-//actions:
-writable = true;
-clickable = true;
-selectable = true;
-movable = false;
-resizable = false;
-//states:
+//actions: edit here
+writable = false;
+clickable = false;
+selectable = false;
+movable = true;
+resizable = true;
+//states: all default to false, do not edit here
 hoovered = false;
 clicked = false;
 selected = false;
@@ -107,26 +104,30 @@ draw_y = y;
 
 function box_fit_txt(){
 	if fit_txt_height == true {
-		var _txt_height = string_height_ext(txt, -1, real_size_x - txt_border_x_len*2);
+		draw_set_font(txt_font);
+		var _txt_height = string_height_ext(txt, -1, size_x - txt_border_x_len*2);
 		if _txt_height > size_y - txt_border_y_len*2 {
 			size_y = _txt_height + txt_border_y_len*2;
 		}
 		
-		while(size_y - txt_border_y_len*2 > _txt_height){
-			size_y -= 1;
+		if fitdown_txt_height == true {
+			while(size_y - txt_border_y_len*2 > _txt_height){
+				size_y -= 1;
+			}
 		}
 		
 		if size_y > size_y_max {
 			size_y = size_y_max;
 		}
 		
-		if size_y < size_y_max {
-			size_y = size_y_max;
+		if size_y < size_y_min {
+			size_y = size_y_min;
 		}
 
 	}
 
 	if fit_txt_width == true {
+		draw_set_font(txt_font);
 		var _txt_width = string_width(txt);
 		if _txt_width > size_x - txt_border_x_len*2 {
 			size_x = _txt_width + txt_border_x_len*2;
