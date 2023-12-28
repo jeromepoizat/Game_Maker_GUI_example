@@ -1,6 +1,7 @@
+if visible == false {exit;}
+
 var _mouse_gui_x = device_mouse_x_to_gui(0);
 var _mouse_gui_y = device_mouse_y_to_gui(0);
-
 
 var _owner_x;
 var _owner_y;
@@ -21,6 +22,45 @@ else
 	_owner_size_x = owner.real_size_x;
 	_owner_size_y = owner.real_size_y;	
 }
+
+real_size_x = size_x*global.gui_scale;
+real_size_y = size_y*global.gui_scale;
+
+if !moving && (resizing_left + resizing_right + resizing_top + resizing_bottom) == 0 {
+	real_relative_x = relative_x*global.gui_scale;
+	real_relative_y = relative_y*global.gui_scale;
+} 
+else 
+{
+	if old_scale == global.gui_scale {
+		relative_x = real_relative_x/global.gui_scale;
+		relative_y = real_relative_y/global.gui_scale;
+	}
+	else
+	{
+		real_relative_x = relative_x*global.gui_scale;
+		real_relative_y = relative_y*global.gui_scale;		
+		old_scale = global.gui_scale;
+	}
+}
+
+if owner_relative_x == "left" {
+	x = _owner_x + real_relative_x;
+}
+else 
+if owner_relative_x == "right" {
+	x = _owner_x + _owner_size_x - real_relative_x - real_size_x;
+}
+
+if owner_relative_y == "top" {
+	y = _owner_y + real_relative_y;
+}
+else 
+if owner_relative_y == "bottom" {
+	y = _owner_y + _owner_size_y - real_relative_y - real_size_y;
+}
+
+
 
 box_fit_txt()
 
@@ -97,7 +137,9 @@ if _mouse_gui_x > x - hoover_err
 		click_timer += 1;
 		
 		if movable == true {
-			moving = true;
+			if (resizing_left + resizing_right + resizing_top + resizing_bottom) == 0  {
+				moving = true;
+			}
 		}
 	}
 	else {
@@ -153,10 +195,6 @@ if moving {
 else
 if resizable {
 	if ( resizing_left || resizing_right || resizing_top || resizing_bottom )
-	/*
-	&& (_mouse_gui_x >= _owner_x && _mouse_gui_x <= _owner_x + _owner_size_x && 
-		_mouse_gui_y >= _owner_y && _mouse_gui_y <= _owner_y + _owner_size_y)
-	*/
 	{
 
 		var _old_size_x = size_x;
@@ -165,7 +203,7 @@ if resizable {
 		if resizing_left {		
 			if ((_mouse_gui_x - click_x) > _owner_x && _mouse_gui_x > x)
 			|| ((_mouse_gui_x - click_x) < _owner_x && _mouse_gui_x < x){
-				size_x = size_x - (_mouse_gui_x - click_x);
+				size_x = size_x - (_mouse_gui_x - click_x)/global.gui_scale;
 				
 				if size_x < size_x_min {
 					size_x = size_x_min;
@@ -176,7 +214,7 @@ if resizable {
 				}
 				
 				box_fit_txt();
-
+				
 				x = x - (size_x - _old_size_x)*global.gui_scale;
 				
 				if x < _owner_x { 
@@ -189,7 +227,7 @@ if resizable {
 		if resizing_right {
 			if ((_mouse_gui_x - click_x) > _owner_x && _mouse_gui_x > x + real_size_x)
 			|| ((_mouse_gui_x - click_x) < _owner_x && _mouse_gui_x < x + real_size_x){			
-				size_x = size_x + (_mouse_gui_x - click_x);
+				size_x = size_x + (_mouse_gui_x - click_x)/global.gui_scale;
 				
 				if size_x < size_x_min {
 					size_x = size_x_min;
@@ -210,7 +248,7 @@ if resizable {
 		if resizing_top {
 			if ((_mouse_gui_y - click_y) > _owner_x && _mouse_gui_y > y)
 			|| ((_mouse_gui_y - click_y) < _owner_x && _mouse_gui_y < y){
-				size_y = size_y - (_mouse_gui_y - click_y);
+				size_y = size_y - (_mouse_gui_y - click_y)/global.gui_scale;
 				
 				if size_y < size_y_min {
 					size_y = size_y_min;
@@ -234,7 +272,7 @@ if resizable {
 		if resizing_bottom {
 			if ((_mouse_gui_y - click_y) > _owner_x && _mouse_gui_y > y + real_size_y)
 			|| ((_mouse_gui_y - click_y) < _owner_x && _mouse_gui_y < y + real_size_y){			
-				size_y = size_y + (_mouse_gui_y - click_y);
+				size_y = size_y + (_mouse_gui_y - click_y)/global.gui_scale;
 				
 				if size_y < size_y_min {
 					size_y = size_y_min;
@@ -314,25 +352,50 @@ else
 }
 
 
+if owner_center_x == true {
+	x = _owner_x + _owner_size_x/2 - real_size_x/2;	
+}
+
+if owner_center_y == true {
+	y = _owner_y + _owner_size_y/2 - real_size_y/2;	
+}
+
+
 //keep object in ui borders
 if x < _owner_x {
 	x = _owner_x;
 }
-if x + real_size_x > _owner_size_x {
-	x = _owner_size_x - real_size_x;
+if x + real_size_x > _owner_x + _owner_size_x {
+	x = _owner_x + _owner_size_x - real_size_x;
 }
 if y < _owner_y {
 	y = _owner_y;
 }
-if y + real_size_y > _owner_size_y {
-	y = _owner_size_y - real_size_y;
+if y + real_size_y > _owner_y + _owner_size_y {
+	y = _owner_y + _owner_size_y - real_size_y;
 }
-	
+
 //refresh variables
+real_size_x = size_x*global.gui_scale;
+real_size_y = size_y*global.gui_scale;
+
+if owner_relative_x == "left" {
+	real_relative_x = x - _owner_x;
+}
+else 
+if owner_relative_x == "right" {
+	real_relative_x = _owner_x + _owner_size_x - real_size_x - x ;
+}
+
+if owner_relative_y == "top" {
+	real_relative_y = y - _owner_y;
+}
+else 
+if owner_relative_y == "bottom" {
+	real_relative_y = _owner_y + _owner_size_y - real_size_y - y ;
+}
 
 draw_x = x;
 draw_y = y;
-real_size_x = size_x*global.gui_scale;
-real_size_y = size_y*global.gui_scale;
 draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);

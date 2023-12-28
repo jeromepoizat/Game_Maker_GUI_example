@@ -2,15 +2,20 @@
 
 visible = false;
 alarm[0]=1;
-
+owner_relative_x = "right";
+owner_relative_y = "top";
+relative_x = 50;
+relative_y = 50;
 owner = noone;
+owner_center_x = false;
+owner_center_y = false;
 sprite_box =  spr_sprite1;
 size_x = 300;
 size_y = 60;
-size_x_min = 100;
-size_y_min = 60;
-size_x_max = 800;
-size_y_max = 800;
+size_x_min = 120;
+size_y_min = 120;
+size_x_max = 1000;
+size_y_max = 1000;
 txt = "SOMETHING to write here or something to not Write here, up to you to decide";
 border_x_len = 10;
 border_y_len = 6;
@@ -23,8 +28,8 @@ fitdown_txt_height = false; //will fit window height to minimum size_y
 writable = false;
 clickable = false;
 selectable = false;
-movable = true;
-resizable = true;
+movable = false;
+resizable = false;
 //states: all default to false, do not edit here
 hoovered = false;
 clicked = false;
@@ -86,8 +91,11 @@ highlight_color = c_dkgray;
 #macro VK_LCOMMAND 92
 
 //draw variables
+old_scale = global.gui_scale;
 real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
+real_relative_x = relative_x*global.gui_scale;
+real_relative_y = relative_y*global.gui_scale;
 
 txt_border_x_len = border_x_len*(global.gui_scale+max(-0.2,global.gui_scale-1));
 txt_border_y_len = border_y_len*(global.gui_scale+max(-0.2,global.gui_scale-1));
