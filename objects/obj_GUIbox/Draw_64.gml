@@ -3,8 +3,9 @@
 //draw box
 draw_sprite_ext(sprite_box, draw_sub,
 				draw_x, draw_y,
-				draw_scale_x, draw_scale_y,
-				0, c_white, draw_alpha
+				draw_scale_x*animation_scale,
+				draw_scale_y*animation_scale,
+				0, c_white, draw_alpha*animation_alpha
 				);
 				
 if txt != "" {

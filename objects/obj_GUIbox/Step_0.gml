@@ -1,5 +1,7 @@
 if visible == false {exit;}
 
+txt = string(size_x);
+
 var _mouse_gui_x = device_mouse_x_to_gui(0);
 var _mouse_gui_y = device_mouse_y_to_gui(0);
 
@@ -21,6 +23,19 @@ else
 	_owner_y = owner.y;
 	_owner_size_x = owner.real_size_x;
 	_owner_size_y = owner.real_size_y;	
+
+	if owner_resize_x {
+		if old_owner_size_x != owner.size_x {
+			size_x = size_x*(owner.size_x/old_owner_size_x);
+			old_owner_size_x = owner.size_x;
+		}
+	}
+	if owner_resize_y {
+		if old_owner_size_y != owner.size_y {
+			size_y = size_y*(owner.size_y/old_owner_size_y);
+			old_owner_size_y = owner.size_y;
+		}	
+	}
 }
 
 real_size_x = size_x*global.gui_scale;
@@ -60,9 +75,8 @@ if owner_relative_y == "bottom" {
 	y = _owner_y + _owner_size_y - real_relative_y - real_size_y;
 }
 
-
-
 box_fit_txt()
+
 
 if writable {
 	scr_textbox_step();	
@@ -395,7 +409,38 @@ if owner_relative_y == "bottom" {
 	real_relative_y = _owner_y + _owner_size_y - real_size_y - y ;
 }
 
-draw_x = x;
-draw_y = y;
+txt_border_x_len = border_x_len*global.gui_scale;
+txt_border_y_len = border_y_len*global.gui_scale;
+txt_x = txt_border_x_len;
+txt_y = txt_border_y_len;
+
+
+if owner == noone {
+	draw_x = lerp(animation_origin_x, x, animation_steps_count/animation_steps);
+	draw_y = lerp(animation_origin_y, y, animation_steps_count/animation_steps);
+}
+else
+{
+	if owner.animation_state != 1 {
+		draw_x = lerp(
+			owner.animation_origin_x,
+			x,
+			owner.animation_steps_count/owner.animation_steps
+		);
+		draw_y = lerp(
+			owner.animation_origin_y,
+			y,
+			owner.animation_steps_count/owner.animation_steps
+		);
+	}
+	else
+	{
+		draw_x = lerp(x+real_size_x/2, x, animation_steps_count/animation_steps);
+		draw_y = lerp(y+real_size_y/2, y, animation_steps_count/animation_steps);		
+	}
+	
+	animation_alpha = animation_alpha*power(owner.animation_alpha,5);
+	animation_scale = animation_scale*owner.animation_scale;
+}
 draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);

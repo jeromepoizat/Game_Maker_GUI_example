@@ -7,6 +7,10 @@ function scr_textbox_surface_start(){
 	// create a surface if it doesn't exist:
 	if (!surface_exists(clip_surface)) {
 	    clip_surface = surface_create(clip_width, clip_height);
+	} 
+	else 
+	if surface_get_height(clip_surface) != clip_height || surface_get_width(clip_surface) != clip_width {
+		surface_resize(clip_surface,clip_width,clip_height);		
 	}
 	// clear and start drawing to surface:
 	surface_set_target(clip_surface);

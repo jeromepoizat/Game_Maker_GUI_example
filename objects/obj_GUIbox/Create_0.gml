@@ -2,8 +2,10 @@
 
 visible = false;
 alarm[0]=1;
-owner_relative_x = "right";
+owner_relative_x = "left";
 owner_relative_y = "top";
+owner_resize_x = false;
+owner_resize_y = false;
 relative_x = 50;
 relative_y = 50;
 owner = noone;
@@ -23,6 +25,11 @@ hoover_err = 5; // amount of error in pixel accepted for hoover state
 fit_txt_height = true; //will strecth size_y to fit text
 fit_txt_width = false; //will strecth size_x to fit text
 fitdown_txt_height = false; //will fit window height to minimum size_y
+//animation
+//...
+animation_state = 1; //0: scale down, 1: scale up
+animation_scale = 1;
+animation_alpha = 1;
 
 //actions: edit here
 writable = false;
@@ -90,6 +97,9 @@ highlight_color = c_dkgray;
 #macro VK_RCOMMAND 91
 #macro VK_LCOMMAND 92
 
+old_owner_size_x = 0;
+old_owner_size_y = 0;
+	
 //draw variables
 old_scale = global.gui_scale;
 real_size_x = size_x*global.gui_scale;
@@ -97,8 +107,8 @@ real_size_y = size_y*global.gui_scale;
 real_relative_x = relative_x*global.gui_scale;
 real_relative_y = relative_y*global.gui_scale;
 
-txt_border_x_len = border_x_len*(global.gui_scale+max(-0.2,global.gui_scale-1));
-txt_border_y_len = border_y_len*(global.gui_scale+max(-0.2,global.gui_scale-1));
+txt_border_x_len = border_x_len*global.gui_scale;
+txt_border_y_len = border_y_len*global.gui_scale;
 txt_x = txt_border_x_len;
 txt_y = txt_border_y_len;
 resize_border_len = resize_border*global.gui_scale;
@@ -113,15 +123,16 @@ draw_y = y;
 function box_fit_txt(){
 	if fit_txt_height == true {
 		draw_set_font(txt_font);
-		var _txt_height = string_height_ext(txt, -1, size_x - txt_border_x_len*2);
-		if _txt_height > size_y - txt_border_y_len*2 {
-			size_y = _txt_height + txt_border_y_len*2;
+		var _txt_height = string_height_ext(txt, -1, size_x - border_x_len*2);
+		if _txt_height == 0 {
+			_txt_height = string_height("A");
+		}
+		if _txt_height > size_y - border_y_len*2 {
+			size_y = _txt_height + border_y_len*2;
 		}
 		
 		if fitdown_txt_height == true {
-			while(size_y - txt_border_y_len*2 > _txt_height){
-				size_y -= 1;
-			}
+			size_y = _txt_height + 18/global.gui_scale + border_y_len;
 		}
 		
 		if size_y > size_y_max {
@@ -137,8 +148,8 @@ function box_fit_txt(){
 	if fit_txt_width == true {
 		draw_set_font(txt_font);
 		var _txt_width = string_width(txt);
-		if _txt_width > size_x - txt_border_x_len*2 {
-			size_x = _txt_width + txt_border_x_len*2;
+		if _txt_width > size_x - border_x_len*2 {
+			size_x = _txt_width + border_x_len*2;
 		}
 		
 		if size_x > size_x_max {
