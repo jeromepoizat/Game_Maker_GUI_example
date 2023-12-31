@@ -8,8 +8,6 @@ global.gui_scale = 1.2;
 //animation origin type: self or owner // so it also moves when self or owner moves
 //animation origin x :real (relative to self or owner)
 //animation origin y :real (relative to self or owner)
-//animation real origin x
-//animation real origin y
 //animation origin scale: 0 - 1
 //animation lerp spd
 
@@ -31,6 +29,8 @@ with(a){
 	animation_origin_x = global.gui_x/2;
 	animation_origin_y = 0//global.gui_y;
 	animation_state = 1;
+	//animation_origin_offset_x = "center";
+	//animation_origin_offset_y = "center";
 }
 global.a = a;
 

@@ -40,10 +40,6 @@ if owner_relative_y == "bottom" {
 	y = _owner_y + _owner_size_y - real_relative_y - real_size_y;
 }
 
-
-//animation
-//...
-
 //draw variables
 old_scale = global.gui_scale;
 real_size_x = size_x*global.gui_scale;
@@ -63,6 +59,7 @@ draw_sub = sub_idle;
 draw_alpha = 1;
 draw_x = x;
 draw_y = y;
+
 
 if writable {
 	alarm[1] = cursor_blink_rate;

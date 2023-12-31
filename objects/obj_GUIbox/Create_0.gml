@@ -26,8 +26,18 @@ fit_txt_height = true; //will strecth size_y to fit text
 fit_txt_width = false; //will strecth size_x to fit text
 fitdown_txt_height = false; //will fit window height to minimum size_y
 //animation
-//...
-animation_state = 1; //0: scale down, 1: scale up
+animation_state = 1; //0: close, 1: open
+animation_origin_type = "self";
+animation_origin_offset_x = "left";
+animation_origin_offset_y = "top"; 
+animation_origin_x_relative = 0;
+animation_origin_y_relative = 0;
+animation_origin_x_real = 0;
+animation_origin_y_real = 0;
+animation_origin_scale = 1;
+animation_progress = 0; //0 - 1
+animation_origin_alpha = 0;
+animation_lerp_rate = 0.08;
 animation_scale = 1;
 animation_alpha = 1;
 

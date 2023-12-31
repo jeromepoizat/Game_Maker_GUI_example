@@ -1,6 +1,6 @@
 if visible == false {exit;}
 
-txt = string(size_x);
+txt = string(animation_progress);
 
 var _mouse_gui_x = device_mouse_x_to_gui(0);
 var _mouse_gui_y = device_mouse_y_to_gui(0);
@@ -415,32 +415,56 @@ txt_x = txt_border_x_len;
 txt_y = txt_border_y_len;
 
 
-if owner == noone {
-	draw_x = lerp(animation_origin_x, x, animation_steps_count/animation_steps);
-	draw_y = lerp(animation_origin_y, y, animation_steps_count/animation_steps);
+//animation
+if animation_state == 0 {//close
+	if animation_progress > 0 {
+		animation_progress = lerp(animation_progress,0, animation_lerp_rate);
+	}
 }
 else
-{
-	if owner.animation_state != 1 {
-		draw_x = lerp(
-			owner.animation_origin_x,
-			x,
-			owner.animation_steps_count/owner.animation_steps
-		);
-		draw_y = lerp(
-			owner.animation_origin_y,
-			y,
-			owner.animation_steps_count/owner.animation_steps
-		);
+if animation_state == 1 {//open
+	if animation_progress < 1 {
+		animation_progress = lerp(animation_progress, 1, animation_lerp_rate);
 	}
-	else
-	{
-		draw_x = lerp(x+real_size_x/2, x, animation_steps_count/animation_steps);
-		draw_y = lerp(y+real_size_y/2, y, animation_steps_count/animation_steps);		
-	}
-	
-	animation_alpha = animation_alpha*power(owner.animation_alpha,5);
-	animation_scale = animation_scale*owner.animation_scale;
 }
+
+//animation
+if animation_origin_type == "self" || !instance_exists(owner){
+	animation_origin_x_real = x + animation_origin_x_relative;
+	animation_origin_y_real = y + animation_origin_y_relative;
+	
+	if animation_origin_offset_x == "center"{
+		animation_origin_x_real = animation_origin_x_real + real_size_x/2;
+	}
+	if animation_origin_offset_x == "right"{
+		animation_origin_x_real = animation_origin_x_real + real_size_x;
+	}
+
+	if animation_origin_offset_y == "center"{
+		animation_origin_y_real = animation_origin_y_real + real_size_y/2;
+	}
+	if animation_origin_offset_y == "bottom"{
+		animation_origin_y_real = animation_origin_y_real + real_size_y;
+	}
+}
+else
+if animation_origin_type == "owner" {
+	animation_origin_x_real = owner.animation_origin_x_real + animation_origin_x_relative;
+	animation_origin_y_real = owner.animation_origin_y_real + animation_origin_y_relative;
+}
+
+
+if instance_exists(owner) && owner.animation_scale < 0.98 {
+	animation_origin_x_real = owner.animation_origin_x_real + animation_origin_x_relative;
+	animation_origin_y_real = owner.animation_origin_y_real + animation_origin_y_relative;
+	animation_progress = owner.animation_progress;	
+}
+
+animation_scale = lerp(animation_origin_scale, 1, animation_progress);
+animation_alpha = lerp(animation_origin_alpha, 1, animation_progress);
+draw_x = lerp(animation_origin_x_real, x, animation_progress);
+draw_y = lerp(animation_origin_y_real, y, animation_progress);
+
+
 draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);
