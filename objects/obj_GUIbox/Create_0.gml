@@ -2,7 +2,7 @@
 
 visible = false;
 alarm[0]=1;
-owner_relative_x = "left";
+owner_relative_x = "right";
 owner_relative_y = "top";
 owner_resize_x = false;
 owner_resize_y = false;
@@ -28,18 +28,18 @@ fitdown_txt_height = false; //will fit window height to minimum size_y
 //animation
 animation_state = 1; //0: close, 1: open
 animation_origin_type = "self";
-animation_origin_offset_x = "left";
-animation_origin_offset_y = "top"; 
-animation_origin_x_relative = 0;
+animation_origin_offset_x = "center";
+animation_origin_offset_y = "center"; 
+animation_origin_x_relative = -500;
 animation_origin_y_relative = 0;
 animation_origin_x_real = 0;
 animation_origin_y_real = 0;
-animation_origin_scale = 1;
+animation_origin_scale = 0;
 animation_progress = 0; //0 - 1
 animation_origin_alpha = 0;
 animation_lerp_rate = 0.08;
-animation_scale = 1;
-animation_alpha = 1;
+animation_scale = 0;
+animation_alpha = 0;
 
 //actions: edit here
 writable = false;

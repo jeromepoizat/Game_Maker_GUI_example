@@ -44,8 +44,10 @@ if owner_relative_y == "bottom" {
 old_scale = global.gui_scale;
 real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
-real_relative_x = relative_x*global.gui_scale;
-real_relative_y = relative_y*global.gui_scale;
+if instance_exists(owner){
+	real_relative_x = relative_x*global.gui_scale;
+	real_relative_y = relative_y*global.gui_scale;
+}
 
 txt_border_x_len = border_x_len*global.gui_scale;
 txt_border_y_len = border_y_len*global.gui_scale;

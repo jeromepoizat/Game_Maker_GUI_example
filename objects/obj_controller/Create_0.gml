@@ -29,8 +29,11 @@ with(a){
 	animation_origin_x = global.gui_x/2;
 	animation_origin_y = 0//global.gui_y;
 	animation_state = 1;
+	animation_origin_scale = 1;
 	//animation_origin_offset_x = "center";
 	//animation_origin_offset_y = "center";
+	animation_origin_x_relative = 0;
+	animation_origin_y_relative = 0;
 }
 global.a = a;
 

@@ -42,19 +42,40 @@ real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
 
 if !moving && (resizing_left + resizing_right + resizing_top + resizing_bottom) == 0 {
-	real_relative_x = relative_x*global.gui_scale;
-	real_relative_y = relative_y*global.gui_scale;
+	if instance_exists(owner){
+		real_relative_x = relative_x*global.gui_scale;
+		real_relative_y = relative_y*global.gui_scale;
+	}
+	else
+	{
+		real_relative_x = relative_x;
+		real_relative_y = relative_y;		
+	}
 } 
 else 
 {
 	if old_scale == global.gui_scale {
-		relative_x = real_relative_x/global.gui_scale;
-		relative_y = real_relative_y/global.gui_scale;
+		if instance_exists(owner){
+			relative_x = real_relative_x/global.gui_scale;
+			relative_y = real_relative_y/global.gui_scale;
+		}
+		else
+		{
+			relative_x = real_relative_x;
+			relative_y = real_relative_y;			
+		}
 	}
 	else
 	{
-		real_relative_x = relative_x*global.gui_scale;
-		real_relative_y = relative_y*global.gui_scale;		
+		if instance_exists(owner){
+			real_relative_x = relative_x*global.gui_scale;
+			real_relative_y = relative_y*global.gui_scale;	
+		}
+		else
+		{
+			real_relative_x = relative_x;
+			real_relative_y = relative_y;			
+		}
 		old_scale = global.gui_scale;
 	}
 }
@@ -74,6 +95,21 @@ else
 if owner_relative_y == "bottom" {
 	y = _owner_y + _owner_size_y - real_relative_y - real_size_y;
 }
+
+//keep object in ui borders
+if x < _owner_x {
+	x = _owner_x;
+}
+if x + real_size_x > _owner_x + _owner_size_x {
+	x = _owner_x + _owner_size_x - real_size_x;
+}
+if y < _owner_y {
+	y = _owner_y;
+}
+if y + real_size_y > _owner_y + _owner_size_y {
+	y = _owner_y + _owner_size_y - real_size_y;
+}
+
 
 box_fit_txt()
 
@@ -365,6 +401,9 @@ else
 	window_set_cursor(cr_default);
 }
 
+//refresh variables
+real_size_x = size_x*global.gui_scale;
+real_size_y = size_y*global.gui_scale;
 
 if owner_center_x == true {
 	x = _owner_x + _owner_size_x/2 - real_size_x/2;	
@@ -373,7 +412,6 @@ if owner_center_x == true {
 if owner_center_y == true {
 	y = _owner_y + _owner_size_y/2 - real_size_y/2;	
 }
-
 
 //keep object in ui borders
 if x < _owner_x {
@@ -388,10 +426,6 @@ if y < _owner_y {
 if y + real_size_y > _owner_y + _owner_size_y {
 	y = _owner_y + _owner_size_y - real_size_y;
 }
-
-//refresh variables
-real_size_x = size_x*global.gui_scale;
-real_size_y = size_y*global.gui_scale;
 
 if owner_relative_x == "left" {
 	real_relative_x = x - _owner_x;
@@ -430,8 +464,15 @@ if animation_state == 1 {//open
 
 //animation
 if animation_origin_type == "self" || !instance_exists(owner){
-	animation_origin_x_real = x + animation_origin_x_relative;
-	animation_origin_y_real = y + animation_origin_y_relative;
+	if instance_exists(owner){
+		animation_origin_x_real = x + animation_origin_x_relative*global.gui_scale;
+		animation_origin_y_real = y + animation_origin_y_relative*global.gui_scale;		
+	}
+	else
+	{
+		animation_origin_x_real = x + animation_origin_x_relative;
+		animation_origin_y_real = y + animation_origin_y_relative;
+	}
 	
 	if animation_origin_offset_x == "center"{
 		animation_origin_x_real = animation_origin_x_real + real_size_x/2;
@@ -454,17 +495,25 @@ if animation_origin_type == "owner" {
 }
 
 
-if instance_exists(owner) && (owner.animation_scale < 0.98) {
+if instance_exists(owner) && (owner.animation_progress < 0.999) {
+	
+	animation_progress = owner.animation_progress;
+	
+	animation_origin_x_real = x + owner.animation_origin_x_relative;
+	animation_origin_y_real = y + owner.animation_origin_y_relative;
+}
+
+animation_scale = lerp(animation_origin_scale, 1 , animation_progress);
+if instance_exists(owner) && (owner.animation_scale < 0.999) {
 	animation_origin_x_real = owner.animation_origin_x_real + animation_origin_x_relative;
 	animation_origin_y_real = owner.animation_origin_y_real + animation_origin_y_relative;
 }
-
-if instance_exists(owner) && (owner.animation_progress < 0.98) {
-	animation_progress = owner.animation_progress;		
+animation_alpha = lerp(animation_origin_alpha, 1, animation_progress);
+if instance_exists(owner) && (owner.animation_alpha < 0.999) {
+	animation_alpha = owner.animation_alpha;
+	animation_scale = owner.animation_scale;
 }
 
-animation_scale = lerp(animation_origin_scale, 1, animation_progress);
-animation_alpha = lerp(animation_origin_alpha, 1, animation_progress);
 draw_x = lerp(animation_origin_x_real, x, animation_progress);
 draw_y = lerp(animation_origin_y_real, y, animation_progress);
 
