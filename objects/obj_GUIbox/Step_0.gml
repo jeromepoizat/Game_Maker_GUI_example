@@ -1,6 +1,6 @@
 if visible == false {exit;}
 
-txt = string(animation_progress);
+txt = string(animation_state);
 
 var _mouse_gui_x = device_mouse_x_to_gui(0);
 var _mouse_gui_y = device_mouse_y_to_gui(0);
@@ -454,10 +454,13 @@ if animation_origin_type == "owner" {
 }
 
 
-if instance_exists(owner) && owner.animation_scale < 0.98 {
+if instance_exists(owner) && (owner.animation_scale < 0.98) {
 	animation_origin_x_real = owner.animation_origin_x_real + animation_origin_x_relative;
 	animation_origin_y_real = owner.animation_origin_y_real + animation_origin_y_relative;
-	animation_progress = owner.animation_progress;	
+}
+
+if instance_exists(owner) && (owner.animation_progress < 0.98) {
+	animation_progress = owner.animation_progress;		
 }
 
 animation_scale = lerp(animation_origin_scale, 1, animation_progress);

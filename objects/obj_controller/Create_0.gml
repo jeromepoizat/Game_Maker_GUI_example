@@ -101,7 +101,7 @@ with(e){
 	owner_relative_x = "left";
 	owner_relative_y = "bottom";
 }
-
+/*
 var f = instance_create_depth(
 	0,
 	0,	
@@ -124,8 +124,7 @@ with(f){
 	fit_txt_width = false;
 	fit_txt_height = true;
 	fitdown_txt_height = true;
-}
-
+}*/
 
 
 
