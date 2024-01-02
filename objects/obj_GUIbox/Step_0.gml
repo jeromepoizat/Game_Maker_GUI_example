@@ -5,6 +5,8 @@ txt = string(animation_state);
 var _mouse_gui_x = device_mouse_x_to_gui(0);
 var _mouse_gui_y = device_mouse_y_to_gui(0);
 
+
+//get owner variables
 var _owner_x;
 var _owner_y;
 var _owner_size_x;
@@ -23,7 +25,8 @@ else
 	_owner_y = owner.y;
 	_owner_size_x = owner.real_size_x;
 	_owner_size_y = owner.real_size_y;	
-
+	
+	//if resize with owner: change size
 	if owner_resize_x {
 		if old_owner_size_x != owner.size_x {
 			size_x = size_x*(owner.size_x/old_owner_size_x);
@@ -41,6 +44,7 @@ else
 real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
 
+//update real_relative_x/y if not moving and not resized
 if !moving && (resizing_left + resizing_right + resizing_top + resizing_bottom) == 0 {
 	if instance_exists(owner){
 		real_relative_x = relative_x*global.gui_scale;
@@ -52,8 +56,9 @@ if !moving && (resizing_left + resizing_right + resizing_top + resizing_bottom) 
 		real_relative_y = relative_y;		
 	}
 } 
-else 
+else //if moving or resized
 {
+	//no change in scale => moving => change relative_x/y
 	if old_scale == global.gui_scale {
 		if instance_exists(owner){
 			relative_x = real_relative_x/global.gui_scale;
@@ -65,7 +70,7 @@ else
 			relative_y = real_relative_y;			
 		}
 	}
-	else
+	else //change of scale => change real_relative_x
 	{
 		if instance_exists(owner){
 			real_relative_x = relative_x*global.gui_scale;
@@ -80,6 +85,7 @@ else
 	}
 }
 
+//set x and y
 if owner_relative_x == "left" {
 	x = _owner_x + real_relative_x;
 }
@@ -97,27 +103,28 @@ if owner_relative_y == "bottom" {
 }
 
 //keep object in ui borders
-if x < _owner_x {
-	x = _owner_x;
+if clamp_inside_owner {
+	if x < _owner_x {
+		x = _owner_x;
+	}
+	if x + real_size_x > _owner_x + _owner_size_x {
+		x = _owner_x + _owner_size_x - real_size_x;
+	}
+	if y < _owner_y {
+		y = _owner_y;
+	}
+	if y + real_size_y > _owner_y + _owner_size_y {
+		y = _owner_y + _owner_size_y - real_size_y;
+	}
 }
-if x + real_size_x > _owner_x + _owner_size_x {
-	x = _owner_x + _owner_size_x - real_size_x;
-}
-if y < _owner_y {
-	y = _owner_y;
-}
-if y + real_size_y > _owner_y + _owner_size_y {
-	y = _owner_y + _owner_size_y - real_size_y;
-}
-
 
 box_fit_txt()
-
 
 if writable {
 	scr_textbox_step();	
 }
 
+//TODO: move this in UI manager
 //check if mouse is hoovering
 if _mouse_gui_x > x - hoover_err
 && _mouse_gui_x < x + real_size_x + hoover_err
@@ -216,8 +223,7 @@ else {
 	}
 }
 
-
-
+//TODO: move this in UI manager
 if mouse_check_button_released(mb_left){
 		 
 	clicked = false;
@@ -362,11 +368,13 @@ if selected {
 } else {
 	draw_sub = sub_idle;		
 }
-//tmp
+
+//tmp (sub for resizing)
 if resizing_left || resizing_right || resizing_top || resizing_bottom  {
  draw_sub = sub_hoover_selected;		
 }
 
+//TODO: move this in UI manager
 if (writable && (hoovered || clicked)){
 	window_set_cursor(cr_beam);
 }
@@ -405,6 +413,7 @@ else
 real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
 
+//correct x,y
 if owner_center_x == true {
 	x = _owner_x + _owner_size_x/2 - real_size_x/2;	
 }
@@ -414,17 +423,19 @@ if owner_center_y == true {
 }
 
 //keep object in ui borders
-if x < _owner_x {
-	x = _owner_x;
-}
-if x + real_size_x > _owner_x + _owner_size_x {
-	x = _owner_x + _owner_size_x - real_size_x;
-}
-if y < _owner_y {
-	y = _owner_y;
-}
-if y + real_size_y > _owner_y + _owner_size_y {
-	y = _owner_y + _owner_size_y - real_size_y;
+if clamp_inside_owner {
+	if x < _owner_x {
+		x = _owner_x;
+	}
+	if x + real_size_x > _owner_x + _owner_size_x {
+		x = _owner_x + _owner_size_x - real_size_x;
+	}
+	if y < _owner_y {
+		y = _owner_y;
+	}
+	if y + real_size_y > _owner_y + _owner_size_y {
+		y = _owner_y + _owner_size_y - real_size_y;
+	}
 }
 
 if owner_relative_x == "left" {
@@ -513,6 +524,8 @@ if instance_exists(owner) && (owner.animation_alpha < 0.999) {
 	animation_alpha = owner.animation_alpha;
 	animation_scale = owner.animation_scale;
 }
+
+//set draw variables
 
 draw_x = lerp(animation_origin_x_real, x, animation_progress);
 draw_y = lerp(animation_origin_y_real, y, animation_progress);

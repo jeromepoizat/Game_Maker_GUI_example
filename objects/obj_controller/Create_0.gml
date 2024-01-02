@@ -52,7 +52,9 @@ with(b){
 	clickable = true;
 	owner_relative_x = "right";
 	owner_relative_y = "top";
+	clamp_inside_owner = false;
 }
+global.b = b;
 
 var c = instance_create_depth(
 	0,
