@@ -1,3 +1,5 @@
+///@description init ui object
+
 visible = true;
 
 var _owner_x;
@@ -16,6 +18,7 @@ if owner == noone {
 }
 else
 {
+	ui_depth = owner.ui_depth + 1;
 	_owner_x = owner.x;
 	_owner_y = owner.y;
 	old_owner_size_x = owner.size_x;
@@ -23,6 +26,8 @@ else
 	_owner_size_x = owner.real_size_x;
 	_owner_size_y = owner.real_size_y;	
 }
+
+ds_list_add(global.ui_object_list_layer[ui_depth], real(id));
 
 if owner_relative_x == "left" {
 	x = _owner_x + real_relative_x;

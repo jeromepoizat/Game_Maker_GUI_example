@@ -1,10 +1,7 @@
 if visible == false {exit;}
 
-txt = string(animation_state);
-
 var _mouse_gui_x = device_mouse_x_to_gui(0);
 var _mouse_gui_y = device_mouse_y_to_gui(0);
-
 
 //get owner variables
 var _owner_x;
@@ -124,125 +121,8 @@ if writable {
 	scr_textbox_step();	
 }
 
-//TODO: move this in UI manager
-//check if mouse is hoovering
-if _mouse_gui_x > x - hoover_err
-&& _mouse_gui_x < x + real_size_x + hoover_err
-&& _mouse_gui_y > y - hoover_err
-&& _mouse_gui_y < y + real_size_y + hoover_err {
-	//hoover
-	hoovered = true;
-	
-	if resizable == true {
-		if (resizing_left + resizing_right + resizing_top + resizing_bottom) == 0 {
-			//check if on resizing left border
-			if _mouse_gui_x >= x - hoover_err
-			&& _mouse_gui_x <= x + resize_border_len {
-				hoover_resizing_left = true;	
-			} else {
-				hoover_resizing_left = false;	
-			}
-
-			//check if on resizing right border
-
-			if _mouse_gui_x <= x + real_size_x + hoover_err
-			&& _mouse_gui_x >= x + real_size_x - resize_border_len {
-				hoover_resizing_right = true;	
-			} else {
-				hoover_resizing_right = false;
-			}
-
-			//check if on resizing top border
-
-			if _mouse_gui_y >= y - hoover_err
-			&& _mouse_gui_y <= y + resize_border_len {
-				hoover_resizing_top = true;	
-			} else {
-				hoover_resizing_top = false;	
-			}
-
-			//check if on resizing bottom border
-
-			if _mouse_gui_y <= y + real_size_y  + hoover_err
-			&& _mouse_gui_y >= y + real_size_y - resize_border_len {
-				hoover_resizing_bottom = true;	
-			} else {
-				hoover_resizing_bottom = false;
-			}
-		}
-	}
-	
-	if mouse_check_button(mb_left){
-		
-		if clicked == false {
-			clicked = true;
-			click_x = _mouse_gui_x;
-			click_y = _mouse_gui_y;
-			
-			if selectable {
-				selected = true;	
-			}
-			
-			if resizable {
-				resizing_left = hoover_resizing_left;	
-				resizing_right = hoover_resizing_right;
-				resizing_top = hoover_resizing_top;
-				resizing_bottom = hoover_resizing_bottom;
-			}
-		}
-		
-		click_timer += 1;
-		
-		if movable == true {
-			if (resizing_left + resizing_right + resizing_top + resizing_bottom) == 0  {
-				moving = true;
-			}
-		}
-	}
-	else {
-		clicked = false;
-		click_timer = 0;	
-	}
-}
-else {
-	//mouse not hoovering
-	hoovered = false;
-	draw_sub = sub_idle;
-	
-	if resizing_left == false {
-		hoover_resizing_left = false;
-	}
-	if resizing_right == false {
-		hoover_resizing_right = false;
-	}
-	if resizing_top == false {
-		hoover_resizing_top = false;
-	}
-	if resizing_bottom == false {
-		hoover_resizing_bottom = false;
-	}
-}
-
-//TODO: move this in UI manager
-if mouse_check_button_released(mb_left){
-		 
-	clicked = false;
-	click_timer = 0;
-	
-	moving = false;
-	
-	resizing_left = false;
-	resizing_right = false;
-	resizing_top = false;
-	resizing_bottom = false;
-	
-	if !hoovered {
-		selected = false;
-	}
-}
-
 if moving {
-	clicked = true;
+	//clicked = true;
 	x = x + (_mouse_gui_x - click_x);
 	y = y + (_mouse_gui_y - click_y);
 	click_x = _mouse_gui_x;
@@ -354,14 +234,14 @@ if resizable {
 }
 
 //set sub-image
-if clickable && clicked {
+if clickable && ((hoovered && clicked) || moving) {
 	draw_sub = sub_click;	
 } else 
 if hoovered && selected {
 	draw_sub = sub_hoover_selected;	
 } else
 if hoovered {
-	draw_sub = sub_hoover;	
+	draw_sub = sub_hoover;
 } else
 if selected {
 	draw_sub = sub_selected;	
@@ -372,41 +252,6 @@ if selected {
 //tmp (sub for resizing)
 if resizing_left || resizing_right || resizing_top || resizing_bottom  {
  draw_sub = sub_hoover_selected;		
-}
-
-//TODO: move this in UI manager
-if (writable && (hoovered || clicked)){
-	window_set_cursor(cr_beam);
-}
-else
-if (clickable && (hoovered || clicked)){
-	window_set_cursor(cr_handpoint);
-}
-else
-if (moving == true){
-	window_set_cursor(cr_size_all);
-}
-else
-if ( hoover_resizing_left && hoover_resizing_top)
-|| (hoover_resizing_right && hoover_resizing_bottom){
-	window_set_cursor(cr_size_nwse);
-}
-else
-if ( hoover_resizing_left && hoover_resizing_bottom)
-|| (hoover_resizing_right && hoover_resizing_top){
-	window_set_cursor(cr_size_nesw);
-}
-else
-if hoover_resizing_left || hoover_resizing_right {
-	window_set_cursor(cr_size_we);
-}
-else
-if hoover_resizing_top || hoover_resizing_bottom {
-	window_set_cursor(cr_size_ns);
-}
-else
-{
-	window_set_cursor(cr_default);
 }
 
 //refresh variables
@@ -473,6 +318,7 @@ if animation_state == 1 {//open
 	}
 }
 
+
 //animation
 if animation_origin_type == "self" || !instance_exists(owner){
 	if instance_exists(owner){
@@ -483,20 +329,6 @@ if animation_origin_type == "self" || !instance_exists(owner){
 	{
 		animation_origin_x_real = x + animation_origin_x_relative;
 		animation_origin_y_real = y + animation_origin_y_relative;
-	}
-	
-	if animation_origin_offset_x == "center"{
-		animation_origin_x_real = animation_origin_x_real + real_size_x/2;
-	}
-	if animation_origin_offset_x == "right"{
-		animation_origin_x_real = animation_origin_x_real + real_size_x;
-	}
-
-	if animation_origin_offset_y == "center"{
-		animation_origin_y_real = animation_origin_y_real + real_size_y/2;
-	}
-	if animation_origin_offset_y == "bottom"{
-		animation_origin_y_real = animation_origin_y_real + real_size_y;
 	}
 }
 else
@@ -510,21 +342,52 @@ if instance_exists(owner) && (owner.animation_progress < 0.999) {
 	
 	animation_progress = owner.animation_progress;
 	
-	animation_origin_x_real = x + owner.animation_origin_x_relative;
-	animation_origin_y_real = y + owner.animation_origin_y_relative;
+	//animation_origin_x_real = x + owner.animation_origin_x_relative;
+	//animation_origin_y_real = y + owner.animation_origin_y_relative;
+	
+	animation_origin_x_real = x - owner.x + owner.animation_origin_x_real
+	animation_origin_y_real = y - owner.y + owner.animation_origin_y_real
+	
 }
 
-animation_scale = lerp(animation_origin_scale, 1 , animation_progress);
 if instance_exists(owner) && (owner.animation_scale < 0.999) {
 	animation_origin_x_real = owner.animation_origin_x_real + animation_origin_x_relative;
 	animation_origin_y_real = owner.animation_origin_y_real + animation_origin_y_relative;
 }
-animation_alpha = lerp(animation_origin_alpha, 1, animation_progress);
+
+animation_alpha = lerp(animation_origin_alpha, 1, sqr(animation_progress));
 if instance_exists(owner) && (owner.animation_alpha < 0.999) {
-	animation_alpha = owner.animation_alpha;
+	animation_alpha = sqr(owner.animation_alpha);
 	animation_scale = owner.animation_scale;
 }
 
+if clickable && scale_on_click && (moving || (clicked && hoovered)) {
+	animation_scale = lerp(animation_scale, scale_on_click_ratio, scale_on_click_rate);
+}
+else
+{
+	animation_scale = lerp(animation_origin_scale, 1 , animation_progress);
+}
+
+if animation_scale < 0.1 {
+	animation_scale = 0;
+}
+
+
+if animation_origin_offset_x == "center"{
+	animation_origin_x_real = animation_origin_x_real + real_size_x/2;
+}
+if animation_origin_offset_x == "right"{
+	animation_origin_x_real = animation_origin_x_real + real_size_x;
+}
+
+if animation_origin_offset_y == "center"{
+	animation_origin_y_real = animation_origin_y_real + real_size_y/2;
+}
+if animation_origin_offset_y == "bottom"{
+	animation_origin_y_real = animation_origin_y_real + real_size_y;
+}
+	
 //set draw variables
 
 draw_x = lerp(animation_origin_x_real, x, animation_progress);

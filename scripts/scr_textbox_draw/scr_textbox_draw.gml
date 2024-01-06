@@ -6,8 +6,8 @@ function scr_textbox_draw(){
 	var _str_height = string_height("A")*global.gui_scale;
 	var _text_margin_x = 10;
 	var _text_margin_y = 10;
-	txt_x = txt_border_x_len + floor(x + _text_margin_x + x_offset);
-	txt_y = txt_border_y_len + floor(y + _text_margin_y);
+	txt_x = txt_border_x_len + floor(draw_x + _text_margin_x + x_offset);
+	txt_y = txt_border_y_len + floor(draw_y + _text_margin_y);
 	//real_size_y = _str_height + (_text_margin_y * 2);
 	
 	if selected {
@@ -71,18 +71,18 @@ function scr_textbox_draw(){
 		txt_x - clip_x,
 		txt_y - clip_y,
 		txt,
-		global.gui_scale,
-		global.gui_scale,
+		global.gui_scale*animation_scale,
+		global.gui_scale*animation_scale,
 		0,
 		c_white,c_white,c_ltgray,c_yellow,
-		draw_alpha
+		draw_alpha*animation_alpha
 	);
 
 	// draw cursor
 	cursor_x = txt_x + string_width(str_to_cursor)*global.gui_scale;
 	var _cursor_y1 = txt_y;
 	var _cursor_y2 = _cursor_y1 + _str_height;
-	if (selected) {
+	if (selected) && animation_scale > 0.95 {
 		var _draw_cursor_real = false;
 		if (draw_cursor || keyboard_check(vk_anykey)) _draw_cursor_real = true;
 		if (_draw_cursor_real) {
@@ -111,14 +111,16 @@ function scr_textbox_draw(){
 	scr_textbox_surface_end();
 	
 	//draw icons for hidden text info
-	if x_offset < 0 {
-		//hidden text on the left
-		draw_text(x,y, "<");
-	}
+	if animation_scale > 0.95 {
+		if x_offset < 0 {
+			//hidden text on the left
+			draw_text(draw_x,draw_y, "<");
+		}
 	
-	if string_width(txt)*global.gui_scale + x_offset > real_size_x - txt_border_x_len*2 {
-		//hidden text on the right
-		draw_text(x + real_size_x - txt_border_x_len*2 ,y, ">");
+		if string_width(txt)*global.gui_scale + x_offset > real_size_x - txt_border_x_len*2 {
+			//hidden text on the right
+			draw_text(draw_x + real_size_x - txt_border_x_len*2 ,y, ">");
+		}
 	}
 	
 

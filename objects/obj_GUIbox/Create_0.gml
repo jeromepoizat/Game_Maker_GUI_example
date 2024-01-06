@@ -2,6 +2,7 @@
 
 visible = false;
 alarm[0]=1;
+ui_depth = 0;
 owner_relative_x = "right";
 owner_relative_y = "top";
 owner_resize_x = true;
@@ -41,6 +42,9 @@ animation_origin_alpha = 0;
 animation_lerp_rate = 0.08;
 animation_scale = 0;
 animation_alpha = 0;
+scale_on_click = true;
+scale_on_click_ratio = 0.96;
+scale_on_click_rate = 0.4;
 
 //actions: edit here
 writable = false;
@@ -133,11 +137,19 @@ draw_y = y;
 
 function box_fit_txt(){
 	if fit_txt_height == true {
+		
 		draw_set_font(txt_font);
-		var _txt_height = string_height_ext(txt, -1, size_x - border_x_len*2);
-		if _txt_height == 0 {
+		
+		var _txt_height = 0;
+		
+		if !writable {
+			_txt_height = string_height_ext(txt, -1, size_x - border_x_len*2);
+		}
+		
+		if _txt_height == 0 || writable {
 			_txt_height = string_height("A");
 		}
+		
 		if _txt_height > size_y - border_y_len*2 {
 			size_y = _txt_height + border_y_len*2;
 		}

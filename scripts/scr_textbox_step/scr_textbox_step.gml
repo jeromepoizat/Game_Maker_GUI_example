@@ -1,5 +1,7 @@
 function scr_textbox_step(){
 	
+	if animation_scale < 0.95 { exit; }
+	
 	// check important keys
 	var _ctrl_check = (os_type == os_macosx) ? keyboard_check(VK_LCOMMAND) || keyboard_check(VK_RCOMMAND) : keyboard_check(vk_control);
 	if (!selected) _ctrl_check = false;
@@ -31,6 +33,7 @@ function scr_textbox_step(){
 	// get keyboard _input
 	var _input = "";
 	if (string_length(keyboard_string) > 0 && selected) _input = keyboard_string;
+	if !selected keyboard_string = "";
 	
 	// CTRL+V (_paste)
 	var _paste = false;

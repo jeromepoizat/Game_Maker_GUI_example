@@ -2,14 +2,21 @@ global.gui_x = window_get_width();
 global.gui_y = window_get_height();
 global.gui_scale = 1.2;
 
-//TODO: option to fit animation origin:
-//animation origin offset :center, left, rigth
-//animation origin offset :center, top, bottom
-//animation origin type: self or owner // so it also moves when self or owner moves
-//animation origin x :real (relative to self or owner)
-//animation origin y :real (relative to self or owner)
-//animation origin scale: 0 - 1
-//animation lerp spd
+ui_object_hoovered = noone;
+ui_object_moving = noone;
+ui_object_resizing = noone;
+ui_object_selected = noone;
+ui_object_clicked = noone;
+
+hoover_resizing_left = false;
+hoover_resizing_right = false;
+hoover_resizing_top = false;
+hoover_resizing_bottom = false;
+
+
+for(var _i = 0; _i < 10; _i += 1){
+	global.ui_object_list_layer[_i] = ds_list_create();
+}
 
 //create interface
 var a = instance_create_depth(
@@ -22,6 +29,7 @@ with(a){
 	size_x = 600;
 	size_y = 400;
 	txt = "WINDOW";
+	clickable = false;
 	movable = true;
 	resizable = true;
 	owner_center_x = false;
@@ -101,12 +109,12 @@ with(e){
 	size_x = 120;
 	size_y = 120;
 	txt = "BUTTON";
-	movable = true;
+	movable = false;
 	clickable = true;
 	owner_relative_x = "left";
 	owner_relative_y = "bottom";
 }
-/*
+
 var f = instance_create_depth(
 	0,
 	0,	
@@ -129,7 +137,7 @@ with(f){
 	fit_txt_width = false;
 	fit_txt_height = true;
 	fitdown_txt_height = true;
-}*/
+}
 
 
 
