@@ -5,9 +5,9 @@ alarm[0]=1;
 ui_depth = 0;
 owner_relative_x = "right";
 owner_relative_y = "top";
-owner_resize_x = true;
+owner_resize_x = false;
 owner_resize_y = false;
-clamp_inside_owner = true;
+clamp_inside_owner = false;
 relative_x = 50;
 relative_y = 50;
 owner = noone;
@@ -16,8 +16,8 @@ owner_center_y = false;
 sprite_box =  spr_sprite1;
 size_x = 300;
 size_y = 60;
-size_x_min = 120;
-size_y_min = 120;
+size_x_min = 100;
+size_y_min = 100;
 size_x_max = 1000;
 size_y_max = 1000;
 txt = "SOMETHING to write here or something to not Write here, up to you to decide";
@@ -45,6 +45,14 @@ animation_alpha = 0;
 scale_on_click = true;
 scale_on_click_ratio = 0.96;
 scale_on_click_rate = 0.4;
+
+child_ui_object_list = ds_list_create();
+child_ui_object_list_direction = "down";
+child_ui_object_list_start_x = 0;
+child_ui_object_list_start_y = 0;
+child_ui_object_list_spacer = 25;
+child_ui_object_list_fit_size_x = false;
+child_ui_object_list_fit_size_y = false;
 
 //actions: edit here
 writable = false;

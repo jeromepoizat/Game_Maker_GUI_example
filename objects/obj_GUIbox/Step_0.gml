@@ -24,6 +24,7 @@ else
 	_owner_size_y = owner.real_size_y;	
 	
 	//if resize with owner: change size
+	
 	if owner_resize_x {
 		if old_owner_size_x != owner.size_x {
 			size_x = size_x*(owner.size_x/old_owner_size_x);
@@ -132,13 +133,13 @@ else
 if resizable {
 	if ( resizing_left || resizing_right || resizing_top || resizing_bottom )
 	{
-
+		
 		var _old_size_x = size_x;
 		var _old_size_y = size_y;
 
 		if resizing_left {		
-			if ((_mouse_gui_x - click_x) > _owner_x && _mouse_gui_x > x)
-			|| ((_mouse_gui_x - click_x) < _owner_x && _mouse_gui_x < x){
+			if ((_mouse_gui_x - click_x) > 0 && _mouse_gui_x > x + hoover_err)
+			|| ((_mouse_gui_x - click_x) < 0 && _mouse_gui_x < x - hoover_err){
 				size_x = size_x - (_mouse_gui_x - click_x)/global.gui_scale;
 				
 				if size_x < size_x_min {
@@ -153,7 +154,7 @@ if resizable {
 				
 				x = x - (size_x - _old_size_x)*global.gui_scale;
 				
-				if x < _owner_x { 
+				if x < _owner_x && clamp_inside_owner { 
 					size_x = size_x + x/global.gui_scale;
 					x = _owner_x;
 				}
@@ -161,8 +162,8 @@ if resizable {
 		}
 
 		if resizing_right {
-			if ((_mouse_gui_x - click_x) > _owner_x && _mouse_gui_x > x + real_size_x)
-			|| ((_mouse_gui_x - click_x) < _owner_x && _mouse_gui_x < x + real_size_x){			
+			if ((_mouse_gui_x - click_x) > 0 && _mouse_gui_x > x + real_size_x + hoover_err)
+			|| ((_mouse_gui_x - click_x) < 0 && _mouse_gui_x < x + real_size_x - hoover_err){			
 				size_x = size_x + (_mouse_gui_x - click_x)/global.gui_scale;
 				
 				if size_x < size_x_min {
@@ -175,15 +176,15 @@ if resizable {
 				
 				box_fit_txt();
 				
-				if x + size_x*global.gui_scale > _owner_size_x {
+				if x + size_x*global.gui_scale > _owner_size_x && clamp_inside_owner {
 					size_x = (_owner_size_x - x)/global.gui_scale;
 				}
 			}
 		}
 
 		if resizing_top {
-			if ((_mouse_gui_y - click_y) > _owner_x && _mouse_gui_y > y)
-			|| ((_mouse_gui_y - click_y) < _owner_x && _mouse_gui_y < y){
+			if ((_mouse_gui_y - click_y) > 0 && _mouse_gui_y > y + hoover_err)
+			|| ((_mouse_gui_y - click_y) < 0 && _mouse_gui_y < y - hoover_err){
 				size_y = size_y - (_mouse_gui_y - click_y)/global.gui_scale;
 				
 				if size_y < size_y_min {
@@ -198,7 +199,7 @@ if resizable {
 
 				y = y - (size_y - _old_size_y)*global.gui_scale;
 				
-				if y < _owner_x { 
+				if y < _owner_x && clamp_inside_owner { 
 					size_y = size_y + y/global.gui_scale;
 					y = _owner_x;
 				}
@@ -206,8 +207,8 @@ if resizable {
 		}
 
 		if resizing_bottom {
-			if ((_mouse_gui_y - click_y) > _owner_x && _mouse_gui_y > y + real_size_y)
-			|| ((_mouse_gui_y - click_y) < _owner_x && _mouse_gui_y < y + real_size_y){			
+			if ((_mouse_gui_y - click_y) > 0 && _mouse_gui_y > y + real_size_y + hoover_err)
+			|| ((_mouse_gui_y - click_y) < 0 && _mouse_gui_y < y + real_size_y - hoover_err){			
 				size_y = size_y + (_mouse_gui_y - click_y)/global.gui_scale;
 				
 				if size_y < size_y_min {
@@ -220,7 +221,7 @@ if resizable {
 				
 				box_fit_txt();
 				
-				if y + size_y*global.gui_scale > _owner_size_y {
+				if y + size_y*global.gui_scale > _owner_size_y && clamp_inside_owner {
 					size_y = (_owner_size_y - y)/global.gui_scale;
 				}
 			}			
@@ -306,6 +307,7 @@ txt_y = txt_border_y_len;
 
 
 //animation
+
 if animation_state == 0 {//close
 	if animation_progress > 0 {
 		animation_progress = lerp(animation_progress,0, animation_lerp_rate);
@@ -387,12 +389,29 @@ if animation_origin_offset_y == "center"{
 if animation_origin_offset_y == "bottom"{
 	animation_origin_y_real = animation_origin_y_real + real_size_y;
 }
-	
+
 //set draw variables
 
 draw_x = lerp(animation_origin_x_real, x, animation_progress);
 draw_y = lerp(animation_origin_y_real, y, animation_progress);
 
-
 draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);
+
+//if childrens
+var child_ui_object_numb = ds_list_size(child_ui_object_list);
+if child_ui_object_numb > 0 {
+	var child_obj;
+	var _x = child_ui_object_list_start_x;
+	var _y = child_ui_object_list_start_y;
+	
+	for(var _i = 0; _i < child_ui_object_numb; _i += 1){
+		child_obj = ds_list_find_value(child_ui_object_list, _i);
+		child_obj.relative_x = _x;
+		child_obj.relative_y = _y;
+		
+		if child_ui_object_list_direction == "down" {
+			_y += child_obj.size_y + child_ui_object_list_spacer;
+		}
+	}
+}

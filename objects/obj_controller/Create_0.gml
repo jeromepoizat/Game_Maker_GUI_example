@@ -52,17 +52,21 @@ var b = instance_create_depth(
 	obj_GUIbox
 )
 with(b){
-	owner = a;
+	//owner = a;
+	ui_depth = 1;
 	size_x = 120;
 	size_y = 120;
 	txt = "BUTTON";
 	movable = true;
 	clickable = true;
-	owner_relative_x = "right";
+	resizable = true;
+	owner_relative_x = "left";
 	owner_relative_y = "top";
+	owner_resize_y = false;
 	clamp_inside_owner = false;
 }
 global.b = b;
+//ds_list_add(global.a.child_ui_object_list,b);
 
 var c = instance_create_depth(
 	0,
@@ -76,10 +80,13 @@ with(c){
 	size_y = 120;
 	txt = "BUTTON";
 	movable = true;
+	resizable = true;
 	clickable = true;
 	owner_relative_x = "right";
-	owner_relative_y = "bottom";
+	owner_relative_y = "top";
+	owner_resize_y = false;
 }
+//ds_list_add(global.a.child_ui_object_list,c);
 
 var d = instance_create_depth(
 	0,
@@ -93,10 +100,13 @@ with(d){
 	size_y = 120;
 	txt = "BUTTON";
 	movable = true;
+	resizable = true;
 	clickable = true;
 	owner_relative_x = "left";
 	owner_relative_y = "top";
+	owner_resize_y = false;
 }
+ds_list_add(global.a.child_ui_object_list,d);
 
 var e = instance_create_depth(
 	0,
@@ -110,10 +120,13 @@ with(e){
 	size_y = 120;
 	txt = "BUTTON";
 	movable = false;
+	resizable = true;
 	clickable = true;
 	owner_relative_x = "left";
-	owner_relative_y = "bottom";
+	owner_relative_y = "top";
+	owner_resize_y = false;
 }
+ds_list_add(global.a.child_ui_object_list,e);
 
 var f = instance_create_depth(
 	0,
@@ -129,16 +142,21 @@ with(f){
 	txt = "BUTTON";
 	movable = true;
 	clickable = true;
-	owner_center_x = true;
-	owner_center_y = "true";
+	//owner_center_x = true;
+	//owner_center_y = "true";
 	owner_resize_x = true;
 	writable = true;
 	selectable = true;
 	fit_txt_width = false;
 	fit_txt_height = true;
 	fitdown_txt_height = true;
+	owner_resize_y = false;
+	
+	owner_relative_x = "left";
+	owner_relative_y = "top";
 }
 
+ds_list_add(global.a.child_ui_object_list,f);
 
 
 
