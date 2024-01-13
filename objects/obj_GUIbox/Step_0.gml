@@ -406,12 +406,32 @@ if child_ui_object_numb > 0 {
 	var _y = child_ui_object_list_start_y;
 	
 	for(var _i = 0; _i < child_ui_object_numb; _i += 1){
+		
 		child_obj = ds_list_find_value(child_ui_object_list, _i);
+		
+		if child_ui_object_list_direction == "up" {
+			if _i != 0 {
+				_y -= child_obj.size_y + child_ui_object_list_spacer;
+			}
+		}
+		
+		if child_ui_object_list_direction == "left" {
+			if _i != 0 {
+				_x -= child_obj.size_x + child_ui_object_list_spacer;
+			}
+		}
+		
 		child_obj.relative_x = _x;
 		child_obj.relative_y = _y;
 		
 		if child_ui_object_list_direction == "down" {
 			_y += child_obj.size_y + child_ui_object_list_spacer;
 		}
+		
+		if child_ui_object_list_direction == "right" {
+			_x += child_obj.size_x + child_ui_object_list_spacer;
+		}
+		
+
 	}
 }

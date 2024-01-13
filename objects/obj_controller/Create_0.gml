@@ -82,7 +82,7 @@ with(c){
 	movable = true;
 	resizable = true;
 	clickable = true;
-	owner_relative_x = "right";
+	owner_relative_x = "left";
 	owner_relative_y = "top";
 	owner_resize_y = false;
 }
@@ -128,6 +128,7 @@ with(e){
 }
 ds_list_add(global.a.child_ui_object_list,e);
 
+
 var f = instance_create_depth(
 	0,
 	0,	
@@ -157,7 +158,5 @@ with(f){
 }
 
 ds_list_add(global.a.child_ui_object_list,f);
-
-
 
 

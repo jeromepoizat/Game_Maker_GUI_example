@@ -60,6 +60,9 @@ txt_x = txt_border_x_len;
 txt_y = txt_border_y_len;
 resize_border_len = resize_border*global.gui_scale;
 
+child_ui_object_list_start_x = max(child_ui_object_list_start_x, border_x_len);
+child_ui_object_list_start_y = max(child_ui_object_list_start_y, border_y_len);
+
 draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);
 draw_sub = sub_idle;
@@ -70,4 +73,15 @@ draw_y = y;
 
 if writable {
 	alarm[1] = cursor_blink_rate;
+}
+
+if ui_surface_create == true {
+	var child_ui_object_numb = ds_list_size(child_ui_object_list);
+	if child_ui_object_numb > 0 {
+		var child_obj;
+		for(var _i = 0; _i < child_ui_object_numb; _i += 1){	
+			child_obj = ds_list_find_value(child_ui_object_list, _i);
+			child_obj.ui_surface_to_draw_on = other.ui_surface;
+		}
+	}
 }

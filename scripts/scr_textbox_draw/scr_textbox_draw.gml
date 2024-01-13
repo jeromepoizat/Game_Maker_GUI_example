@@ -1,4 +1,4 @@
-function scr_textbox_draw(){
+function scr_textbox_draw(_surface_delta_x = 0, _surface_delta_y = 0, _surface = noone){
 	
 	// set text positions and window height
 	draw_set_font(txt_font);
@@ -59,7 +59,7 @@ function scr_textbox_draw(){
 	}
 	
 	// start clipping for text
-	scr_textbox_surface_start();
+	scr_textbox_surface_start(_surface_delta_x, _surface_delta_y);
 
 	// draw text
 	draw_set_font(txt_font);
@@ -68,8 +68,8 @@ function scr_textbox_draw(){
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	draw_text_transformed_color(
-		txt_x - clip_x,
-		txt_y - clip_y,
+		txt_x - clip_x - _surface_delta_x,
+		txt_y - clip_y - _surface_delta_y,
 		txt,
 		global.gui_scale*animation_scale,
 		global.gui_scale*animation_scale,
@@ -87,7 +87,13 @@ function scr_textbox_draw(){
 		if (draw_cursor || keyboard_check(vk_anykey)) _draw_cursor_real = true;
 		if (_draw_cursor_real) {
 			draw_set_color(cursor_color);
-			draw_line_width(cursor_x - clip_x, _cursor_y1 - clip_y, cursor_x - clip_x, _cursor_y2 - clip_y, 2*global.gui_scale);
+			draw_line_width(
+				cursor_x - clip_x - _surface_delta_x,
+				_cursor_y1 - clip_y - _surface_delta_y,
+				cursor_x - clip_x - _surface_delta_x,
+				_cursor_y2 - clip_y - _surface_delta_y,
+				2*global.gui_scale
+			);
 		}
 	}
 
@@ -103,23 +109,37 @@ function scr_textbox_draw(){
 	
 		draw_set_color(highlight_color);
 		draw_set_alpha(0.6);
-		draw_rectangle(_highlight_rect_x1 - clip_x, _highlight_rect_y1 - clip_y, _highlight_rect_x2 - clip_x, _highlight_rect_y2 - clip_y, false);
+		draw_rectangle(
+			_highlight_rect_x1 - clip_x  - _surface_delta_x,
+			_highlight_rect_y1 - clip_y  - _surface_delta_y,
+			_highlight_rect_x2 - clip_x  - _surface_delta_x,
+			_highlight_rect_y2 - clip_y  - _surface_delta_y,
+			false
+		);
 		draw_set_alpha(1);
 	}
 
 	// end clipping for text
-	scr_textbox_surface_end();
+	scr_textbox_surface_end(_surface);
 	
 	//draw icons for hidden text info
 	if animation_scale > 0.95 {
 		if x_offset < 0 {
 			//hidden text on the left
-			draw_text(draw_x,draw_y, "<");
+			draw_text(
+				draw_x - _surface_delta_x,
+				draw_y - _surface_delta_y,
+				"<"
+			);
 		}
 	
 		if string_width(txt)*global.gui_scale + x_offset > real_size_x - txt_border_x_len*2 {
 			//hidden text on the right
-			draw_text(draw_x + real_size_x - txt_border_x_len*2 ,y, ">");
+			draw_text(
+				draw_x + real_size_x - txt_border_x_len*2 - _surface_delta_x,
+				y - _surface_delta_y,
+				">"
+			);
 		}
 	}
 	

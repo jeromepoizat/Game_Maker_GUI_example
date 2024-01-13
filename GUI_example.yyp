@@ -34,6 +34,7 @@
     "IDEVersion": "2023.11.1.129",
   },
   "resources": [
+    {"id":{"name":"scr_draw_ui","path":"scripts/scr_draw_ui/scr_draw_ui.yy",},},
     {"id":{"name":"scr_textbox_surface_end","path":"scripts/scr_textbox_surface_end/scr_textbox_surface_end.yy",},},
     {"id":{"name":"scr_textbox_surface_start","path":"scripts/scr_textbox_surface_start/scr_textbox_surface_start.yy",},},
     {"id":{"name":"scr_is_char_letter","path":"scripts/scr_is_char_letter/scr_is_char_letter.yy",},},
