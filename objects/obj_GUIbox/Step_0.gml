@@ -399,39 +399,95 @@ draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);
 
 //if childrens
-var child_ui_object_numb = ds_list_size(child_ui_object_list);
-if child_ui_object_numb > 0 {
-	var child_obj;
+var _child_ui_object_numb = ds_list_size(child_ui_object_list);
+if _child_ui_object_numb > 0 {
+	var _child_obj;
 	var _x = child_ui_object_list_start_x;
 	var _y = child_ui_object_list_start_y;
+	var _max_size_x = child_ui_object_list_spacer_perp;
+	var _max_size_y = child_ui_object_list_spacer_perp;
+	var _max_x = child_ui_object_list_start_x;
+	var _max_y = child_ui_object_list_start_y;
 	
-	for(var _i = 0; _i < child_ui_object_numb; _i += 1){
+	for(var _i = 0; _i < _child_ui_object_numb; _i += 1){
 		
-		child_obj = ds_list_find_value(child_ui_object_list, _i);
+		_child_obj = ds_list_find_value(child_ui_object_list, _i);
+		
+		_max_size_x = max(_child_obj.size_x + child_ui_object_list_spacer, _max_size_x);
+		_max_size_y = max(_child_obj.size_y + child_ui_object_list_spacer, _max_size_y);
 		
 		if child_ui_object_list_direction == "up" {
 			if _i != 0 {
-				_y -= child_obj.size_y + child_ui_object_list_spacer;
+				_y -= _child_obj.size_y + child_ui_object_list_spacer;
 			}
 		}
 		
 		if child_ui_object_list_direction == "left" {
 			if _i != 0 {
-				_x -= child_obj.size_x + child_ui_object_list_spacer;
+				_x -= _child_obj.size_x + child_ui_object_list_spacer;
 			}
 		}
 		
-		child_obj.relative_x = _x;
-		child_obj.relative_y = _y;
-		
-		if child_ui_object_list_direction == "down" {
-			_y += child_obj.size_y + child_ui_object_list_spacer;
-		}
-		
 		if child_ui_object_list_direction == "right" {
-			_x += child_obj.size_x + child_ui_object_list_spacer;
+			
+			if child_ui_object_list_fit_break == "down" {
+				
+				if _x + _child_obj.size_x > size_x - border_x_len {
+					_x = child_ui_object_list_start_x;
+					_y += _max_size_y + child_ui_object_list_spacer_perp;
+				}
+			}
+		}
+		//TODO: refactor this
+		if child_ui_object_list_direction == "down" {				
+			if child_ui_object_list_fit_break == "right"
+			&& _y + _child_obj.size_y > size_y - border_y_len {
+				_y = child_ui_object_list_start_y;
+				_x += _max_size_x + child_ui_object_list_spacer_perp;
+			}
 		}
 		
+		_child_obj.relative_x = _x;
+		_child_obj.relative_y = _y;
+		
+		if child_ui_object_list_direction == "down" {				
+			/*if child_ui_object_list_fit_break == "right"
+			&& _y + _child_obj.size_y > size_y - border_y_len {
+				_y = child_ui_object_list_start_y;
+				_x += _max_size_x + child_ui_object_list_spacer_perp;
+			}
+			else*/
+			//{
+				_y += _child_obj.size_y + child_ui_object_list_spacer;
+			//}
+		}
+		
+		if child_ui_object_list_direction == "right" {	
+			_x += _child_obj.size_x + child_ui_object_list_spacer;
+		}
+		
+		
+		//if last element of list, remove spacer
+		if _i == _child_ui_object_numb -1 {
+			if child_ui_object_list_direction == "right" || child_ui_object_list_direction == "left" {
+				_x = abs(_x) - child_ui_object_list_spacer + border_x_len*2;
+			}
+			else
+			if child_ui_object_list_direction == "up" || child_ui_object_list_direction == "down" {
+				_y = abs(_y) - child_ui_object_list_spacer + border_y_len*2;
+			}			
+		}
+		
+		_max_x = max(_max_size_x, abs(_x));
+		_max_y = max(_max_size_y, abs(_y));
 
+	}
+	
+	if child_ui_object_list_fit_size_x == true {
+		size_x = _max_x;
+	}
+	
+	if child_ui_object_list_fit_size_y == true {
+		size_y = _max_y;
 	}
 }

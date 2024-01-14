@@ -38,6 +38,8 @@ with(a){
 	animation_origin_y = 0//global.gui_y;
 	animation_state = 1;
 	animation_origin_scale = 1;
+	owner_relative_x = "left";
+	owner_relative_y = "top";
 	//animation_origin_offset_x = "center";
 	//animation_origin_offset_y = "center";
 	animation_origin_x_relative = 0;
@@ -82,7 +84,7 @@ with(c){
 	movable = true;
 	resizable = true;
 	clickable = true;
-	owner_relative_x = "left";
+	owner_relative_x = "right";
 	owner_relative_y = "top";
 	owner_resize_y = false;
 }

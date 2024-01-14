@@ -51,10 +51,12 @@ ui_surface = noone;
 ui_surface_to_draw_on = noone;
 
 child_ui_object_list = ds_list_create();
-child_ui_object_list_direction = "right";
+child_ui_object_list_direction = "down";
 child_ui_object_list_start_x = 10;
 child_ui_object_list_start_y = 10;
 child_ui_object_list_spacer = 25;
+child_ui_object_list_spacer_perp = 0;
+child_ui_object_list_fit_break = "right";
 child_ui_object_list_fit_size_x = false;
 child_ui_object_list_fit_size_y = false;
 
