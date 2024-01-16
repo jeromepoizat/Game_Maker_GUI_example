@@ -49,8 +49,8 @@ function scr_ui_draw(_surface_delta_x = 0, _surface_delta_y = 0){
 	}
 	
 	if ui_surface_create == true {
-		var _surf_width = real_size_x - child_ui_object_list_start_x*2*global.gui_scale;
-		var _surf_height = real_size_y - child_ui_object_list_start_y*2*global.gui_scale;
+		var _surf_width = real_size_x - child_ui_object_list_start_x*global.gui_scale;
+		var _surf_height = real_size_y - child_ui_object_list_start_y*global.gui_scale;
 	
 		if (!surface_exists(ui_surface)) {
 		    ui_surface = surface_create(_surf_width, _surf_height);

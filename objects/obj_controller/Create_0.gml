@@ -147,7 +147,7 @@ with(f){
 	clickable = true;
 	//owner_center_x = true;
 	//owner_center_y = "true";
-	owner_resize_x = true;
+	owner_resize_x = false;
 	writable = true;
 	selectable = true;
 	fit_txt_width = false;
