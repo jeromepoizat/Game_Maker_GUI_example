@@ -18,6 +18,39 @@ for(var _i = 0; _i < 10; _i += 1){
 	global.ui_object_list_layer[_i] = ds_list_create();
 }
 
+
+var aa = instance_create_depth(
+	global.gui_x/2,
+	global.gui_y/2,	
+	1,
+	obj_GUIbox
+);
+with(aa){
+	size_x = 800;
+	size_y = 500;
+	txt = "WINDOW";
+	clickable = false;
+	movable = true;
+	resizable = true;
+	owner_center_x = false;
+	owner_center_y = false;
+	animation_origin_x = global.gui_x/2;
+	animation_origin_y = 0//global.gui_y;
+	animation_state = 1;
+	animation_origin_scale = 1;
+	owner_relative_x = "left";
+	owner_relative_y = "top";
+	//animation_origin_offset_x = "center";
+	//animation_origin_offset_y = "center";
+	animation_origin_x_relative = 0;
+	animation_origin_y_relative = 0;
+	child_ui_object_list_direction = "";
+	ui_surface_create = true;
+}
+global.aa = aa;
+
+
+
 //create interface
 var a = instance_create_depth(
 	global.gui_x/2,
@@ -38,14 +71,17 @@ with(a){
 	animation_origin_y = 0//global.gui_y;
 	animation_state = 1;
 	animation_origin_scale = 1;
+	owner = aa;
 	owner_relative_x = "left";
 	owner_relative_y = "top";
 	//animation_origin_offset_x = "center";
 	//animation_origin_offset_y = "center";
 	animation_origin_x_relative = 0;
 	animation_origin_y_relative = 0;
+	ui_surface_create = false;
 }
 global.a = a;
+ds_list_add(global.aa.child_ui_object_list, a);
 
 var b = instance_create_depth(
 	0,

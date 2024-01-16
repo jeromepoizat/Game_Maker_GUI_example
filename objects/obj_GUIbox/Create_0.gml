@@ -46,9 +46,11 @@ scale_on_click = true;
 scale_on_click_ratio = 0.96;
 scale_on_click_rate = 0.4;
 
-ui_surface_create = true;
+ui_surface_create = false;
 ui_surface = noone;
 ui_surface_to_draw_on = noone;
+ui_surface_to_draw_on_x = 0;
+ui_surface_to_draw_on_y = 0;
 
 child_ui_object_list = ds_list_create();
 child_ui_object_list_direction = "right";

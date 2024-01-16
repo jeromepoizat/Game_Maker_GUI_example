@@ -48,12 +48,15 @@ function scr_ui_draw(_surface_delta_x = 0, _surface_delta_y = 0){
 		}
 	}
 	
+	
 	if ui_surface_create == true {
-		var _surf_width = real_size_x - child_ui_object_list_start_x*global.gui_scale;
-		var _surf_height = real_size_y - child_ui_object_list_start_y*global.gui_scale;
+		
+		var _surf_width = real_size_x - child_ui_object_list_start_x*global.gui_scale - txt_border_x_len;
+		var _surf_height = real_size_y - child_ui_object_list_start_y*global.gui_scale - txt_border_y_len;
+		
 	
 		if (!surface_exists(ui_surface)) {
-		    ui_surface = surface_create(_surf_width, _surf_height);
+			ui_surface = surface_create(_surf_width, _surf_height);
 		} 
 		else 
 		if surface_get_height(ui_surface) != _surf_height 
@@ -66,18 +69,42 @@ function scr_ui_draw(_surface_delta_x = 0, _surface_delta_y = 0){
 			
 			surface_set_target(ui_surface);
 			draw_clear_alpha(c_black, 0);
+			
 		
 			var child_obj;
 			for(var _i = 0; _i < child_ui_object_numb; _i += 1){	
 				child_obj = ds_list_find_value(child_ui_object_list, _i);
 				with(child_obj){
-					ui_surface_to_draw_on = other.ui_surface;
+					
+					ui_surface = other.ui_surface;
+					ui_surface_to_draw_on = other.ui_surface;			
 					scr_ui_draw(other.draw_x + other.txt_border_x_len, other.draw_y + other.txt_border_y_len);
+
 				}
 			}
 			
+
 			surface_reset_target();
-			draw_surface(ui_surface, draw_x + txt_border_x_len, draw_y + txt_border_y_len);
+	
+
+			draw_surface(
+				ui_surface,
+				draw_x + txt_border_x_len,
+				draw_y + txt_border_y_len
+			);
+
 		}
+	}
+	
+	if ui_surface_to_draw_on != noone {
+		var child_ui_object_numb = ds_list_size(child_ui_object_list);
+		for(var _i = 0; _i < child_ui_object_numb; _i += 1){	
+			child_obj = ds_list_find_value(child_ui_object_list, _i);
+			with(child_obj){
+				ui_surface = other.ui_surface;
+				ui_surface_to_draw_on = other.ui_surface_to_draw_on;			
+				scr_ui_draw(_surface_delta_x, _surface_delta_y);
+			}
+		}		
 	}
 }

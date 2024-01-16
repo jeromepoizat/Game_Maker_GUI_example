@@ -400,7 +400,7 @@ draw_scale_y = real_size_y/sprite_get_height(sprite_box);
 
 //if childrens
 var _child_ui_object_numb = ds_list_size(child_ui_object_list);
-if _child_ui_object_numb > 0 {
+if _child_ui_object_numb > 0 && child_ui_object_list_direction != "" {
 	var _child_obj;
 	var _x = child_ui_object_list_start_x;
 	var _y = child_ui_object_list_start_y;

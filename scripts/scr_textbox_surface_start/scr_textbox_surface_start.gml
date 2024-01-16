@@ -13,7 +13,9 @@ function scr_textbox_surface_start(_surface_delta_x = 0, _surface_delta_y = 0){
 		surface_resize(clip_surface, clip_width, clip_height);		
 	}
 	// clear and start drawing to surface:
-	surface_reset_target();
+	if ui_surface != noone {
+		surface_reset_target();
+	}
 	surface_set_target(clip_surface);
 	draw_clear_alpha(c_black, 0);
 }
