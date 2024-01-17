@@ -5,7 +5,7 @@ visible = true;
 var _owner_x;
 var _owner_y;
 var _owner_size_x;
-var _owner_size_y
+var _owner_size_y;
 
 if owner == noone {
 	//window
@@ -49,6 +49,7 @@ if owner_relative_y == "bottom" {
 old_scale = global.gui_scale;
 real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
+
 if instance_exists(owner){
 	real_relative_x = relative_x*global.gui_scale;
 	real_relative_y = relative_y*global.gui_scale;
@@ -69,7 +70,6 @@ draw_sub = sub_idle;
 draw_alpha = 1;
 draw_x = x;
 draw_y = y;
-
 
 if writable {
 	alarm[1] = cursor_blink_rate;

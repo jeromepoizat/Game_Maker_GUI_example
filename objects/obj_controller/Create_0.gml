@@ -46,9 +46,34 @@ with(aa){
 	animation_origin_y_relative = 0;
 	child_ui_object_list_direction = "";
 	ui_surface_create = true;
+	scrollable = true;
 }
 global.aa = aa;
 
+var bb = instance_create_depth(
+	0,
+	0,	
+	1,
+	obj_GUIbox
+);
+with(bb){
+	owner = aa;
+	size_x = 10;
+	size_y = 500;
+	txt = "SCROLLER";
+	clickable = true;
+	movable = false;
+	resizable = false
+	animation_state = 1;
+	animation_origin_scale = 1;
+	owner_relative_x = "right";
+	owner_relative_y = "top";
+	child_ui_object_list_direction = "";
+	scroller = true;
+	scroller_direction = "down";
+	scroll_with_owner = false;
+}
+global.bb = bb;
 
 
 //create interface

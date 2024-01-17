@@ -1,6 +1,7 @@
 function scr_ui_draw(_surface_delta_x = 0, _surface_delta_y = 0){
 	/// @description 
 	if animation_scale + animation_alpha == 0 {exit;}
+	if scroller && owner.scroll_y == 0 && owner.scroll_length_y_up + owner.scroll_length_y_down == 0 {exit;}
 	
 	//draw box
 	

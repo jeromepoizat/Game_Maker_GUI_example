@@ -52,6 +52,15 @@ ui_surface_to_draw_on = noone;
 ui_surface_to_draw_on_x = 0;
 ui_surface_to_draw_on_y = 0;
 
+scroll_x = 0;
+scroll_y = 0;
+scroll_with_owner = true;
+scroller_direction = "down";
+scroll_length_x_right = 0;
+scroll_length_x_left = 0;
+scroll_length_y_up = 0;
+scroll_length_y_down = 0;
+
 child_ui_object_list = ds_list_create();
 child_ui_object_list_direction = "right";
 child_ui_object_list_start_x = 10;
@@ -68,6 +77,8 @@ clickable = false;
 selectable = false;
 movable = false;
 resizable = false;
+scrollable = false;
+scroller = false;
 //states: all default to false, do not edit here
 hoovered = false;
 clicked = false;

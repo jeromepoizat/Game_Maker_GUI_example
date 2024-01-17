@@ -156,6 +156,17 @@ if ui_object_moving == noone && ui_object_resizing == noone {
 										other.ui_object_resizing = _ui_object;
 									}
 								}
+								
+								if scroller {
+									if instance_exists(owner){
+										if scroller_direction = "right" {
+											owner.scroll_x = owner.scroll_length_x*(x - click_x)/size_x;
+										}
+										if scroller_direction = "down" {
+											owner.scroll_y = lerp(owner.scroll_length_y_up, owner.scroll_length_y_down,(y - click_y)/size_y);
+										}
+									}
+								}
 							} //end click action
 							
 							//check movable

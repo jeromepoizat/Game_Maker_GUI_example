@@ -18,8 +18,15 @@ if owner == noone {
 }
 else
 {
-	_owner_x = owner.x;
-	_owner_y = owner.y;
+	if scroll_with_owner {
+		_owner_x = owner.x + owner.scroll_x;
+		_owner_y = owner.y + owner.scroll_y;		
+	}
+	else
+	{
+		_owner_x = owner.x;
+		_owner_y = owner.y;
+	}
 	_owner_size_x = owner.real_size_x;
 	_owner_size_y = owner.real_size_y;	
 	
@@ -398,9 +405,12 @@ draw_y = lerp(animation_origin_y_real, y, animation_progress);
 draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);
 
+scroll_length_y_up = 0;
+scroll_length_y_down = 0;
+
 //if childrens
 var _child_ui_object_numb = ds_list_size(child_ui_object_list);
-if _child_ui_object_numb > 0 && child_ui_object_list_direction != "" {
+if _child_ui_object_numb > 0 {
 	var _child_obj;
 	var _x = child_ui_object_list_start_x;
 	var _y = child_ui_object_list_start_y;
@@ -449,8 +459,10 @@ if _child_ui_object_numb > 0 && child_ui_object_list_direction != "" {
 		_max_size_x = max(_child_obj.size_x + child_ui_object_list_spacer, _max_size_x);
 		_max_size_y = max(_child_obj.size_y + child_ui_object_list_spacer, _max_size_y);
 		
-		_child_obj.relative_x = _x;
-		_child_obj.relative_y = _y;
+		if child_ui_object_list_direction != "" {
+			_child_obj.relative_x = _x;
+			_child_obj.relative_y = _y;
+		}
 		
 		if child_ui_object_list_direction == "down" {				
 			_y += _child_obj.size_y + child_ui_object_list_spacer;
@@ -474,8 +486,19 @@ if _child_ui_object_numb > 0 && child_ui_object_list_direction != "" {
 		
 		_max_x = max(_max_size_x, abs(_x));
 		_max_y = max(_max_size_y, abs(_y));
-
-	}
+		
+		//set owner scroll limit
+		if _child_obj.y + _child_obj.size_y > y + size_y
+		&&  (_child_obj.y + _child_obj.size_y) - (y + size_y) > scroll_length_y_down {
+			scroll_length_y_down = (_child_obj.y + _child_obj.size_y) - (y + size_y);
+		}
+		
+		if _child_obj.relative_y < y 
+		&&  y - _child_obj.y - scroll_y  > scroll_length_y_up {
+			scroll_length_y_up = y - _child_obj.y ;
+		}
+	
+	} // end loop child uis
 	
 	if child_ui_object_list_fit_size_x == true {
 		size_x = _max_x;
