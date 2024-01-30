@@ -19,8 +19,8 @@ if owner == noone {
 else
 {
 	if scroll_with_owner {
-		_owner_x = owner.x + owner.scroll_x;
-		_owner_y = owner.y + owner.scroll_y;		
+		_owner_x = owner.x + owner.real_scroll_x;
+		_owner_y = owner.y + owner.real_scroll_y;		
 	}
 	else
 	{
@@ -46,6 +46,8 @@ else
 	}
 }
 
+real_scroll_y = scroll_y*global.gui_scale;
+real_scroll_x = scroll_x*global.gui_scale;
 real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
 
@@ -405,8 +407,8 @@ draw_y = lerp(animation_origin_y_real, y, animation_progress);
 draw_scale_x = real_size_x/sprite_get_width(sprite_box);
 draw_scale_y = real_size_y/sprite_get_height(sprite_box);
 
-scroll_length_y_up = 0;
-scroll_length_y_down = 0;
+child_ui_top_most_y = 0;
+child_ui_down_most_y = 0;
 
 //if childrens
 var _child_ui_object_numb = ds_list_size(child_ui_object_list);
@@ -487,18 +489,20 @@ if _child_ui_object_numb > 0 {
 		_max_x = max(_max_size_x, abs(_x));
 		_max_y = max(_max_size_y, abs(_y));
 		
-		//set owner scroll limit
-		if _child_obj.y + _child_obj.size_y > y + size_y
-		&&  (_child_obj.y + _child_obj.size_y) - (y + size_y) > scroll_length_y_down {
-			scroll_length_y_down = (_child_obj.y + _child_obj.size_y) - (y + size_y);
+
+		if _child_obj.relative_y - border_y_len*2 < child_ui_top_most_y {
+			child_ui_top_most_y = _child_obj.relative_y - border_y_len*2
 		}
 		
-		if _child_obj.relative_y < y 
-		&&  y - _child_obj.y - scroll_y  > scroll_length_y_up {
-			scroll_length_y_up = y - _child_obj.y ;
+		if _child_obj.relative_y + _child_obj.size_y - size_y + border_y_len*2 > child_ui_down_most_y {
+			child_ui_down_most_y = _child_obj.relative_y + _child_obj.size_y - size_y + border_y_len*2;
 		}
+
 	
 	} // end loop child uis
+	
+	//show_debug_message("child_ui_top_most_y : " + string(child_ui_top_most_y))
+	//show_debug_message("child_ui_down_most_y : " + string(child_ui_down_most_y))
 	
 	if child_ui_object_list_fit_size_x == true {
 		size_x = _max_x;

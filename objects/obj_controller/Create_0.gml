@@ -40,6 +40,7 @@ with(aa){
 	animation_origin_scale = 1;
 	owner_relative_x = "left";
 	owner_relative_y = "top";
+	border_y_len = 15;
 	//animation_origin_offset_x = "center";
 	//animation_origin_offset_y = "center";
 	animation_origin_x_relative = 0;
@@ -59,7 +60,7 @@ var bb = instance_create_depth(
 with(bb){
 	owner = aa;
 	size_x = 10;
-	size_y = 500;
+	size_y = 400;
 	txt = "SCROLLER";
 	clickable = true;
 	movable = false;
@@ -67,8 +68,10 @@ with(bb){
 	animation_state = 1;
 	animation_origin_scale = 1;
 	owner_relative_x = "right";
-	owner_relative_y = "top";
+	//owner_relative_y = "top";
+	owner_center_y = true;
 	child_ui_object_list_direction = "";
+	owner_resize_y = true;
 	scroller = true;
 	scroller_direction = "down";
 	scroll_with_owner = false;

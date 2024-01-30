@@ -160,10 +160,27 @@ if ui_object_moving == noone && ui_object_resizing == noone {
 								if scroller {
 									if instance_exists(owner){
 										if scroller_direction = "right" {
-											owner.scroll_x = owner.scroll_length_x*(x - click_x)/size_x;
+											//owner.scroll_x = owner.scroll_length_x*(x - click_x)/size_x;
 										}
 										if scroller_direction = "down" {
-											owner.scroll_y = lerp(owner.scroll_length_y_up, owner.scroll_length_y_down,(y - click_y)/size_y);
+											show_debug_message(
+												"-child_ui_top_most_y : "+string(-owner.child_ui_top_most_y)
+											)
+											
+											show_debug_message(
+												"child_ui_down_most_y : "+string(-owner.child_ui_down_most_y)
+											)
+											
+											show_debug_message(
+												"(y - click_y)/real_size_y : "+string(-(y - click_y)/real_size_y)
+											)
+											
+											owner.scroll_y = lerp(-owner.child_ui_top_most_y,
+																-owner.child_ui_down_most_y,
+																-(y - click_y)/real_size_y);
+											show_debug_message(
+											"scroll_y : "+string(owner.scroll_y)
+											)
 										}
 									}
 								}

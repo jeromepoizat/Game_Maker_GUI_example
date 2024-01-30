@@ -56,10 +56,6 @@ scroll_x = 0;
 scroll_y = 0;
 scroll_with_owner = true;
 scroller_direction = "down";
-scroll_length_x_right = 0;
-scroll_length_x_left = 0;
-scroll_length_y_up = 0;
-scroll_length_y_down = 0;
 
 child_ui_object_list = ds_list_create();
 child_ui_object_list_direction = "right";
@@ -70,6 +66,8 @@ child_ui_object_list_spacer_perp = 0;
 child_ui_object_list_fit_break = "down";
 child_ui_object_list_fit_size_x = false;
 child_ui_object_list_fit_size_y = false;
+child_ui_top_most_y = 0;
+child_ui_down_most_y = 0;
 
 //actions: edit here
 writable = false;
@@ -148,6 +146,8 @@ real_size_x = size_x*global.gui_scale;
 real_size_y = size_y*global.gui_scale;
 real_relative_x = relative_x*global.gui_scale;
 real_relative_y = relative_y*global.gui_scale;
+real_scroll_x = scroll_x*global.gui_scale;
+real_scroll_y = scroll_y*global.gui_scale;
 
 txt_border_x_len = border_x_len*global.gui_scale;
 txt_border_y_len = border_y_len*global.gui_scale;
